@@ -1,0 +1,57 @@
+version: '3.8'
+
+services:
+  mofy-wsl:
+    build:
+      context: .
+      dockerfile: Dockerfile.wsl
+    container_name: mofy-wsl
+    ports:
+      - "8000:8000"
+      - "5678:5678"
+    environment:
+      - PYTHONPATH=/app
+      - PYTHONUNBUFFERED=1
+      - REDIS_HOST=redis-wsl
+      - REDIS_PORT=6379
+      - LOG_LEVEL=DEBUG
+      - WSL_MODE=1
+    env_file:
+      - .env
+    volumes:
+      - /mnt/d/Workshop/ai4se/mofiy:/app
+      - /mnt/d/Workshop/ai4se/mofiy/logs:/app/logs
+    depends_on:
+      redis-wsl:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - mofy-wsl-network
+    command: >
+      bash -c "pip install debugpy &&
+               python -m debugpy --listen 0.0.0.0:5678 --wait-for-client -m run.py"
+
+  redis-wsl:
+    image: redis:7-alpine
+    container_name: mofy-redis-wsl
+    ports:
+      - "6379:6379"
+    command: redis-server --appendonly yes --maxmemory 512mb --maxmemory-policy allkeys-lru
+    volumes:
+      - redis-wsl-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+    networks:
+      - mofy-wsl-network
+
+volumes:
+  redis-wsl-data:
+    driver: local
+
+networks:
+  mofy-wsl-network:
+    driver: bridge

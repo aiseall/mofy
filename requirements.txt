@@ -1,0 +1,15 @@
+# Mofy Agent Framework - 核心依赖
+openai==1.30.0
+pydantic==2.4.2
+loguru==0.7.2
+python-dotenv==1.0.0
+apscheduler==3.10.4
+redis==5.0.1
+aiohttp==3.9.1
+memory-profiler==0.61.0
+pipdeptree==2.13.0
+
+# WSL开发工具
+ipython>=8.0.0
+jupyter>=1.0.0
+notebook>=7.0.0
