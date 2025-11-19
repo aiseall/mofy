@@ -19,8 +19,8 @@ services:
     env_file:
       - .env
     volumes:
-      - /mnt/d/Workshop/ai4se/mofiy:/app
-      - /mnt/d/Workshop/ai4se/mofiy/logs:/app/logs
+      - .:/app
+      - ./logs:/app/logs
     depends_on:
       redis-wsl:
         condition: service_healthy
