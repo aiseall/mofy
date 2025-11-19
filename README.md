@@ -1,6 +1,6 @@
 # Mofy Agent Framework
 
-![Mofy Logo](images/logo.jpeg)
+<img src="images/logo.jpeg" alt="Mofy Logo" width="30%">
 
 一个轻量级、高性能的Python Agent框架，基于从0到1开发Agent框架的最佳实践构建。
 
