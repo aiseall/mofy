@@ -6,7 +6,7 @@
 
 一个轻量级、高性能的Python Agent框架，基于从0到1开发Agent框架的最佳实践构建。
 
-## 特性
+## ✨ 特性
 
 - 🚀 **轻量级设计** - 核心依赖最小化，启动速度快
 - 🧠 **智能调度** - 基于优先级的任务调度系统
@@ -17,7 +17,7 @@
 - 🌐 **多模型支持** - 支持OpenAI、硅基流动等多种LLM提供商
 - 🐳 **Docker支持** - 完整的容器化开发和部署环境
 
-## 快速开始
+## 🚀 快速开始
 
 ### 方式1: 本地开发
 
@@ -33,20 +33,47 @@ cp .env.example .env
 python examples/simple_agent.py
 ```
 
-### 方式2: Docker调试（推荐）
+### 方式2: Docker部署（推荐）
 
 ```bash
-# Windows用户
-scripts\docker-start.bat prod
+# 启动完整服务栈
+docker-compose -f docker-compose.wsl.yml up -d
 
-# Linux/Mac用户
-chmod +x scripts/docker-start.sh
-./scripts/docker-start.sh prod
+# 查看服务状态
+docker-compose ps
+
+# 查看日志
+docker-compose logs -f
 ```
 
-## Docker调试指南
+## 🔧 环境配置
 
-### 🐳 Docker服务架构
+### LLM模型配置
+
+#### OpenAI模型
+```env
+LLM_PROVIDER=openai
+MODEL_NAME=gpt-4o
+OPENAI_API_KEY=your_openai_api_key
+```
+
+#### 硅基流动模型
+```env
+LLM_PROVIDER=siliconflow
+MODEL_NAME=deepseek-ai/DeepSeek-R1-Distill-Qwen-32B
+SILICONFLOW_API_KEY=your_siliconflow_api_key
+SILICONFLOW_BASE_URL=https://api.siliconflow.cn/v1
+```
+
+**支持的硅基流动模型：**
+- `deepseek-ai/DeepSeek-R1-Distill-Qwen-32B` - DeepSeek R1蒸馏版32B
+- `Qwen/Qwen2.5-72B-Instruct` - 通义千问2.5 72B指令版
+- `meta-llama/Llama-3.1-70B-Instruct` - Llama 3.1 70B指令版
+- `01-ai/Yi-1.5-34B-Chat` - 零一万物34B对话版
+
+**获取API密钥：** 访问 [硅基流动官网](https://cloud.siliconflow.cn/) 注册并获取API密钥
+
+### Docker服务架构
 
 ```
 ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
@@ -64,40 +91,7 @@ chmod +x scripts/docker-start.sh
 └─────────────────┘    └─────────────────┘
 ```
 
-### 🚀 快速启动命令
-
-```bash
-# 生产环境（包含所有服务）
-./scripts/docker-start.sh prod
-
-# 开发环境（热重载+调试）
-./scripts/docker-start.sh dev
-
-# 运行测试
-./scripts/docker-start.sh test
-
-# 查看服务状态
-docker-compose ps
-
-# 查看日志
-./scripts/docker-start.sh logs
-
-# 停止所有服务
-./scripts/docker-start.sh stop
-
-# 清理所有资源
-./scripts/docker-start.sh clean
-```
-
-### 🛠️ 开发环境特性
-
-- **热重载**: 代码修改自动重启
-- **远程调试**: 支持VS Code调试器连接
-- **代码质量检查**: 集成flake8、black、isort
-- **单元测试**: pytest + 覆盖率报告
-- **性能分析**: memory_profiler + psutil
-
-### 📊 服务访问地址
+**服务访问地址：**
 
 | 服务 | 地址 | 说明 |
 |------|------|------|
@@ -106,27 +100,7 @@ docker-compose ps
 | Jupyter Lab | http://localhost:8888 | 开发调试环境 |
 | Redis | localhost:6379 | 记忆存储服务 |
 
-### 🔧 环境配置
-
-1. **复制环境配置**:
-```bash
-cp .env.docker .env
-```
-
-2. **编辑配置文件**:
-```env
-# 选择LLM提供商
-LLM_PROVIDER=siliconflow
-MODEL_NAME=deepseek-ai/DeepSeek-R1-Distill-Qwen-32B
-SILICONFLOW_API_KEY=your_api_key_here
-
-# 或使用OpenAI
-# LLM_PROVIDER=openai
-# MODEL_NAME=gpt-4o
-# OPENAI_API_KEY=your_openai_api_key
-```
-
-### 🐛 调试配置
+### 开发调试
 
 #### VS Code远程调试
 
@@ -152,53 +126,28 @@ SILICONFLOW_API_KEY=your_api_key_here
 }
 ```
 
-#### 日志调试
+#### 常用Docker命令
 
 ```bash
-# 查看实时日志
+# 启动服务
+docker-compose -f docker-compose.wsl.yml up -d
+
+# 查看日志
 docker-compose logs -f mofy-agent
 
-# 查看特定服务日志
-docker-compose logs -f redis
+# 重启服务
+docker-compose restart mofy-agent
 
-# 查看所有服务日志
-docker-compose logs -f
+# 停止服务
+docker-compose down
+
+# 重新构建并启动
+docker-compose up --build -d
 ```
 
-## LLM模型配置
+## 🏗️ 核心架构
 
-### OpenAI模型（默认）
-```env
-LLM_PROVIDER=openai
-MODEL_NAME=gpt-4o
-OPENAI_API_KEY=your_openai_api_key
-```
-
-### 硅基流动模型
-```env
-LLM_PROVIDER=siliconflow
-MODEL_NAME=deepseek-ai/DeepSeek-R1-Distill-Qwen-32B
-SILICONFLOW_API_KEY=your_siliconflow_api_key
-SILICONFLOW_BASE_URL=https://api.siliconflow.cn/v1
-```
-
-#### 支持的硅基流动模型
-- `deepseek-ai/DeepSeek-R1-Distill-Qwen-32B` - DeepSeek R1蒸馏版32B
-- `Qwen/Qwen2.5-72B-Instruct` - 通义千问2.5 72B指令版
-- `meta-llama/Llama-3.1-70B-Instruct` - Llama 3.1 70B指令版
-- `01-ai/Yi-1.5-34B-Chat` - 零一万物34B对话版
-
-#### 获取硅基流动API密钥
-1. 访问 [硅基流动官网](https://cloud.siliconflow.cn/)
-2. 注册并登录账户
-3. 在控制台获取API密钥
-4. 将密钥配置到环境变量中
-
-## 核心架构
-
-
-
-### 🏗️ 系统架构图
+### 系统架构图
 
 ```mermaid
 graph TB
@@ -258,7 +207,7 @@ graph TB
     class Config,TaskQueue,TaskStatus,Retry,ErrorAnalysis,LoopDetection,Improvement process
 ```
 
-### 🔄 数据流架构
+### 数据流架构
 
 ```mermaid
 flowchart LR
@@ -296,7 +245,7 @@ flowchart LR
     class Store,Context,Result output
 ```
 
-### 📦 模块依赖关系
+### 模块依赖关系
 
 ```mermaid
 graph TD
@@ -358,7 +307,7 @@ graph TD
     class Examples,Simple,React,Financial,Tests,TestAgent,TestMemory exampleModule
 ```
 
-### 🎯 核心特性说明
+### 核心特性
 
 #### 1. **智能任务调度**
 - 基于优先级的任务队列管理
@@ -576,7 +525,7 @@ def __init__(self, session_id: str = None)
 
 ## 🧪 测试
 
-### 运行单元测试
+### 运行测试
 ```bash
 # 运行所有测试
 pytest
@@ -584,8 +533,8 @@ pytest
 # 运行特定测试文件
 pytest tests/test_agent.py
 
-# 运行测试并生成覆盖率报告
-pytest --cov=mofy tests/
+# 生成覆盖率报告
+pytest --cov=mofy --cov-report=html tests/
 ```
 
 ### 测试覆盖率
@@ -602,7 +551,7 @@ open htmlcov/index.html
 ### Docker部署
 ```bash
 # 构建镜像
-docker build -t mofy-agent .
+docker build -f Dockerfile.wsl -t mofy-agent .
 
 # 运行容器
 docker run -d -p 8000:8000 --name mofy-agent mofy-agent
@@ -611,13 +560,13 @@ docker run -d -p 8000:8000 --name mofy-agent mofy-agent
 ### Docker Compose部署
 ```bash
 # 启动所有服务
-docker-compose up -d
+docker-compose -f docker-compose.wsl.yml up -d
 
 # 查看服务状态
 docker-compose ps
 
 # 停止服务
-docker-compose down
+docker-compose -f docker-compose.wsl.yml down
 ```
 
 ## 🤝 贡献指南
